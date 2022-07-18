@@ -34,6 +34,7 @@ Object.defineProperties(object, {
   },
 });
 
+
 console.log(getKeysByDescriptor(object, 'writable')); // ['lastName']
 console.log(getKeysByDescriptor(object, 'enumerable')); // ['age']
 console.log(getKeysByDescriptor(object, 'configurable')); // ['checker']
@@ -46,12 +47,14 @@ console.log(isObjectAnyFrozen(ob)); // true
 
 console.log(isObjectAnyFrozen({})); // false
 
-const obj = {};
 
+const obj = {};
 const res = assignLockedValues(obj, 'name');
 
 console.log(res !== obj); // true
 console.log(res.name); // null
+
+
 
 const objWithProp = {
   name: 'test',
@@ -62,8 +65,19 @@ const resNext = assignLockedValues(obj, 'name');
 console.log(resNext !== objWithProp); // true
 console.log(res.name); // test
 
+// const resNext = assignLockedValues(objWithProp, 'name');
+//
+// console.log(resNext !== objWithProp); // true
+// console.log(resNext.name); // test
+
+
+
+
+
+
 const freezeCheck = { name: 'test' };
 const freezeRes = freezeAllInObject(freezeCheck);
+
 
 freezeRes.test = 'test';
 delete freezeRes.name;
