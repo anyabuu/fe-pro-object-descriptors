@@ -60,15 +60,15 @@ const objWithProp = {
   name: 'test',
 };
 
-const resNext = assignLockedValues(obj, 'name');
-
-console.log(resNext !== objWithProp); // true
-console.log(res.name); // test
-
-// const resNext = assignLockedValues(objWithProp, 'name');
+// const resNext = assignLockedValues(obj, 'name');
 //
 // console.log(resNext !== objWithProp); // true
-// console.log(resNext.name); // test
+// console.log(res.name); // test
+
+const resNext = assignLockedValues(objWithProp, 'name');
+
+console.log(resNext !== objWithProp); // true
+console.log(resNext.name); // test
 
 
 

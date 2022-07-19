@@ -9,18 +9,16 @@
  * @returns string[]
  */
 export const getKeysByDescriptor = (object, descriptor) => {
+  let propertyObj = Object.getOwnPropertyDescriptors(object);
+  let keys = Object.keys(propertyObj);
 
-    let propertyObj = Object.getOwnPropertyDescriptors(object);
-    let keys = Object.keys(propertyObj)
+  let filtered = keys.filter(function (item) {
+    if (propertyObj[item][descriptor] === true) {
+      return item;
+    }
+  });
 
-    let filtered = keys.filter(function(item){
-
-        if(propertyObj[item][descriptor] === true) {
-            return item
-        }
-    })
-
-    return filtered
+  return filtered;
 };
 
 /**
@@ -29,13 +27,11 @@ export const getKeysByDescriptor = (object, descriptor) => {
  * @returns {boolean}
  */
 export const isObjectAnyFrozen = (object) => {
-
-    if (Object.isExtensible(object) === false){
-        return true
-    } else if (Object.isSealed(object) === true ){
-        return true
-    } else return Object.isFrozen(object) === true;
-
+  if (Object.isExtensible(object) === false) {
+    return true;
+  } else if (Object.isSealed(object) === true) {
+    return true;
+  } else return Object.isFrozen(object) === true;
 };
 
 /**
@@ -49,33 +45,33 @@ export const isObjectAnyFrozen = (object) => {
  * @returns {Object}
  */
 export const assignLockedValues = (object, propertyName) => {
+  console.log(object);
+  console.log(propertyName);
 
-    console.log(object)
-    console.log(propertyName)
+  console.log(object.propertyName);
 
-    console.log(object.propertyName)
+  // let clone = Object.defineProperties({[propertyName]: object.propertyName}, Object.getOwnPropertyDescriptors(object))
+  // console.log(clone)
 
-    let clone = Object.defineProperties({[propertyName]: object.propertyName}, Object.getOwnPropertyDescriptors(object))
-    console.log(clone)
+  const clone = { ...object };
+  console.log(clone);
 
+  let descriptorObg = Object.getOwnPropertyDescriptors(clone);
+  console.log(descriptorObg);
 
-    let descriptorObg = Object.getOwnPropertyDescriptors(clone)
-    console.log(descriptorObg)
+  console.log(propertyName in clone);
 
-
-    if(clone.propertyName === undefined){
-
-        return Object.defineProperty(clone, propertyName, {
-            writable: false,
-            value: null
-        });
-
-    } else {
-        return Object.defineProperty(clone, propertyName, {
-            value: clone.propertyName,
-            writable: false,
-        });
-    }
+  if (propertyName in clone) {
+    return Object.defineProperty(clone, propertyName, {
+      writable: false,
+    });
+  } else {
+    return Object.defineProperty(clone, propertyName, {
+      enumerable: true,
+      configurable: true,
+      value: null,
+    });
+  }
 };
 
 /**
@@ -86,10 +82,10 @@ export const assignLockedValues = (object, propertyName) => {
  */
 
 export const freezeAllInObject = (object) => {
-    let clone = Object.defineProperties({}, Object.getOwnPropertyDescriptors(object));
+  let clone = Object.defineProperties(
+    {},
+    Object.getOwnPropertyDescriptors(object)
+  );
 
-    return Object.preventExtensions(Object.freeze(Object.seal(clone)))
-
+  return Object.preventExtensions(Object.freeze(Object.seal(clone)));
 };
-
-
