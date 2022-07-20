@@ -13,7 +13,7 @@ export const getKeysByDescriptor = (object, descriptor) => {
   let keys = Object.keys(propertyObj);
 
   let filtered = keys.filter(function (item) {
-    if (propertyObj[item][descriptor] === true) {
+    if (propertyObj[item][descriptor]) {
       return item;
     }
   });
@@ -27,11 +27,11 @@ export const getKeysByDescriptor = (object, descriptor) => {
  * @returns {boolean}
  */
 export const isObjectAnyFrozen = (object) => {
-  if (Object.isExtensible(object) === false) {
-    return true;
-  } else if (Object.isSealed(object) === true) {
-    return true;
-  } else return Object.isFrozen(object) === true;
+  return (
+    !Object.isExtensible(object) ||
+    Object.isSealed(object) ||
+    Object.isFrozen(object)
+  );
 };
 
 /**
